@@ -2,9 +2,9 @@
 
 
 ## Work completed 
-1. Code for NDM completed/
-2. Code for Model building/
-3. Code for Model training/
+1. Code for NDM completed
+2. Code for Model building
+3. Code for Model training
 4. Code for Model testing
 
 
