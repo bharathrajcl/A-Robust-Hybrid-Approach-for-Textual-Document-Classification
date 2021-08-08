@@ -5,26 +5,22 @@ Created on Sat Jul 24 13:50:46 2021
 @author: Bharathraj C L
 """
 
-from PIL import Image,ImageFont,ImageDraw
 import os
 import pandas as pd
 from nltk.corpus import stopwords
-import glob
-
 
 import json
 with open('training_config_data.json') as data:
     training_config_data = json.load(data)
     
 path = training_config_data['data_folder_path']
-temp_path = './main_dataset/'
-data_list = os.listdir('./main_dataset/')
+temp_path = training_config_data['raw_dataset_folder_path']
+data_list = os.listdir(temp_path)
 act_data_list = [x for x in data_list if(x.split('.')[-1] == 'tsv')]
 
 punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
 
 
-'OLYI'.lower()
 
 def remove_punct(each_token):
     no_punct = ""
@@ -72,18 +68,14 @@ def main_method(data_list,count_per_label):
             all_data = all_data.values
             del r_head
             del r_body
-            print(all_data.shape)
-            data_result_100 = []
             count = 0
             index = 0
             for each_data in all_data:
-                #print(each_data)
                 count = count+1
                 text= each_data[0]+' '+each_data[1]
                 pre_text = clean_doc(text).split(' ')
                 if(len(pre_text) > 100):
                     pre_text = ' '.join(pre_text)
-                    #create_image_file(pre_text, label_data, path, index)
                     create_text_file(pre_text, label_data, path, index)
                     index = index+1
                 if(index > count_per_label):
@@ -93,7 +85,7 @@ def main_method(data_list,count_per_label):
                 
 
             
-main_method(act_data_list, 5000)
+main_method(act_data_list, training_config_data['number_raw_file_per_labels'])
     
 
 def create_relevant_csv(file_path,output_path):
@@ -116,27 +108,3 @@ def create_relevant_csv(file_path,output_path):
 
 create_relevant_csv(training_config_data['data_folder_path'], training_config_data['base_file_path'])
 
-
-    
-'''
-new_ui = {
-"data_folder_path":"C:/Users/Bharathraj C L/Downloads/paper to implement/page stream tensorflow/merge_data",
-"image_size":[128,128],
-"base_file_path":"C:/Users/Bharathraj C L/Downloads/paper to implement/page stream tensorflow/data_all.csv",
-"No_of_rows_per_label":100,
-"Embedding_required" : True,
-"train_option_dict": {"image_model": True,"text_model":True,"merge_model":True},
-"epochs":1,
-"batch_size":64,
-"image_model_path":"save_image_model",
-"text_model_path":"save_text_model",
-"merge_model_path":"save_merge_model",
-"image_model_build_path":"non scratch",
-"text_model_build_path":"non scratch",
-"merge_model_build_path":"non scratch",
-"length":1000
-}
-import json
-with open('training_config_data.json','w+') as data:
-    json.dump(new_ui,data)
-'''

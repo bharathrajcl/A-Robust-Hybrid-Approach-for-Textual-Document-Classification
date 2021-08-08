@@ -6,9 +6,10 @@ Created on Sun Aug  1 16:27:21 2021
 """
 
 from nltk.corpus import stopwords
-from pickle import load
+from pickle import load,dump
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+
 
 def load_dataset(filename):
     document = load(open(filename,'rb'))
@@ -60,3 +61,12 @@ def encode_text(tokenizer,lines,length):
     encoded = tokenizer.texts_to_sequences(lines)
     padded = pad_sequences(encoded,maxlen=length,padding='post')
     return padded
+
+def save_tokenizer_vector(tokenizer,file_path):
+    with open(file_path,'wb') as handle:
+        dump(tokenizer,handle)
+        
+def load_tokenizer_vector(file_path):
+    with open(file_path,'rb') as handle:
+        vector = load(handle)
+    return vector

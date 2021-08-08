@@ -9,9 +9,24 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
 from collections import Counter
-import time
 
 def dataframe_req(data):
+    '''
+    This function converts list of sentences in to count vector format and labels in to numerical format
+
+    Parameters
+    ----------
+    data : list
+        list of data which consist on sentence with respective labels.
+
+    Returns
+    -------
+    frequent_list : List
+        List of sentence with word count.
+    target_out : List
+        List of labels in numberical format
+
+    '''
     frequent_list = []
     for each_sent in data:
         each_sent = each_sent[0].lower()
@@ -22,13 +37,26 @@ def dataframe_req(data):
     labels = []
     for each_label in data:
         labels.append(each_label[1])
-    
     target_out = lb.fit_transform(labels)
     
     return frequent_list,target_out
 
 
 def get_unique_words(frequent_list):
+    '''
+    This function retrieve unique wrds from all sentences and returns the same.
+
+    Parameters
+    ----------
+    frequent_list : list
+        list of sentences with word count.
+
+    Returns
+    -------
+    words : List
+        List of unique words.
+
+    '''
     words = []
     for i in frequent_list:
         words.extend(i.keys())
@@ -119,12 +147,10 @@ def cleaning_col(df,cleaning_condition,consider_percentage):
     for i in df_col:
         col_data = df[i]
         check = col_data.sum()
-        if(check > row_count*0.001*1000):
+        if(check > row_count*cleaning_condition*consider_percentage):
             col_count[i[0]] = check
         
     col_count = sorted(col_count,key = col_count.get,reverse= True)
-    dict_count = len(col_count)
-    
     result_text = col_count
     
     return result_text,col_count

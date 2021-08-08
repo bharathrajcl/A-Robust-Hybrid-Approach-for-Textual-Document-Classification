@@ -11,6 +11,8 @@ import util_code
 import ndm_code
 import pandas as pd
 import json
+
+
 with open('training_config_data.json') as data:
     training_config_data = json.load(data)
 
@@ -57,25 +59,21 @@ def filter_ndm(documents_act,result_dict):
 def save_dataset(dataset,filename):
     dump(dataset, open(filename,'wb'))
     
-is_ndm_flag = True
+
 train_datapath = training_config_data['data_folder_path']
-#test_datapath= './data_10000/test/'
-'''
-if(is_ndm_flag):
+test_datapath = training_config_data['data_folder_path']
+
+if(training_config_data['is_ndm_flag']):
     documents = retrieve_data(train_datapath)
     document_copy = documents.copy()
     result_dict,result_text = ndm_code.ndm_main(document_copy)
     document_copy = documents.copy()
     documents1 = filter_ndm(document_copy, result_dict)
+    save_dataset(documents1, training_config_data['preprocessed_dataset_training'])
 else:
-    documents = retrieve_data(train_datapath)
-'''
-documents = retrieve_data(train_datapath)
-document_copy = documents.copy()
-result_dict,result_text = ndm_code.ndm_main(document_copy)
-document_copy = documents.copy()
-documents1 = filter_ndm(document_copy, result_dict)
-save_dataset(documents1, 'train_data.pkl')
+    documents1 = retrieve_data(train_datapath)
+    save_dataset(documents1, training_config_data['preprocessed_dataset_training'])
 
-#documents = retrieve_data(test_datapath)
-#save_dataset(documents, 'test_10000.pkl')
+
+documents = retrieve_data(test_datapath)
+save_dataset(documents, training_config_data['preprocessed_dataset_testing'])
